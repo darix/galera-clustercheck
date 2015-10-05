@@ -1,7 +1,9 @@
 #!/usr/bin/ruby
 # vim: set sw=2 sts=2 et tw=80 :
+
 require 'unicorn'
 require 'mysql2'
+require 'yaml'
 
 config = {
   available_when_donor: false,
@@ -14,7 +16,10 @@ config = {
   check_host:     'localhost',
   check_port:     3306,
 }
- 
+
+loaded_config = YAML.load_file('/etc/galera-clustercheck/config.yml')
+config        = config.merge(loaded_config)
+
 app=Proc.new { |env|
   current_time=Time.now
   read_only=false
