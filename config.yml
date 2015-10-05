@@ -2,9 +2,9 @@
 :available_when_donor: false
 :disable_when_readonly: true
 :cache: 1
-:port: 8001
+:port: 8080
 :ipv6: true
 :check_user: clustercheck
 :check_password: foobar1
 :check_host: localhost
-:check_port: 3307
+:check_port: 3306

@@ -9,7 +9,7 @@ config = {
   available_when_donor: false,
   disable_when_readonly: true,
   cache: 1,
-  port: 8000,
+  port: 8080,
   ipv6: true,
   check_user:     'clustercheck',
   check_password: 'foobar',
@@ -19,6 +19,9 @@ config = {
 
 loaded_config = YAML.load_file('/etc/galera-clustercheck/config.yml')
 config        = config.merge(loaded_config)
+
+unicorn_options = {}
+unicorn_options[:listeners] = ["127.0.0.1:#{config[:port]}"]
 
 app=Proc.new { |env|
   current_time=Time.now
@@ -37,18 +40,18 @@ app=Proc.new { |env|
       end
     end
     if results.count < 1 
-      ['520', {'Content-Type' => 'text/html'}, ["Percona XtraDB Cluster Node state could not be retrieved."]]
+      ['520', {'Content-Type' => 'text/plain'}, ["Percona XtraDB Cluster Node state could not be retrieved."]]
     elsif results.first and (results.first['Value'] == '4' or (config[:available_when_donor] and results.first['Value'] == '2'))
-      ['200', {'Content-Type' => 'text/html'}, ["Percona XtraDB Cluster Node is synced."]]
+      ['200', {'Content-Type' => 'text/plain'}, ["Percona XtraDB Cluster Node is synced."]]
     else  
-      ['503', {'Content-Type' => 'text/html'}, ["Percona XtraDB Cluster Node is not synced."]]
+      ['503', {'Content-Type' => 'text/plain'}, ["Percona XtraDB Cluster Node is not synced."]]
     end
   rescue Exception => ex
-    ['500', {'Content-Type' => 'text/html'}, ["woopsie daisy\n"]]
+    ['500', {'Content-Type' => 'text/plain'}, ["woopsie daisy\n"]]
     p ex 
   ensure
     client.close
   end
 }
 
-Unicorn::HttpServer.new(app, {}).start.join
+Unicorn::HttpServer.new(app, unicorn_options).start.join

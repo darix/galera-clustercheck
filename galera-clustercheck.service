@@ -1,0 +1,16 @@
+[Unit]
+Description=Galera Clustercheck
+After=mysql.target network.target
+
+[Service]
+Type=simple
+User=galera-clustercheck
+Group=galera-clustercheck
+WorkingDirectory=/var/lib/galera-clustercheck/
+#EnvironmentFile=/etc/galera-clustercheck/galera-clustercheck.conf
+ExecStart=/usr/sbin/galera-clustercheck.rb $GALERA_CLUSTERCHECK_OPTIONS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
