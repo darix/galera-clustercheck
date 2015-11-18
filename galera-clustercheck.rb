@@ -50,7 +50,7 @@ app=Proc.new { |env|
     ['500', {'Content-Type' => 'text/plain'}, ["woopsie daisy\n"]]
     p ex 
   ensure
-    client.close
+    client.close if client
   end
 }
 
