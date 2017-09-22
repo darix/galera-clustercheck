@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 # vim: set sw=2 sts=2 et tw=80 :
 
-require 'unicorn'
+require 'rack'
 require 'mysql2'
 require 'yaml'
 
@@ -19,9 +19,6 @@ config = {
 
 loaded_config = YAML.load_file('/etc/galera-clustercheck/config.yml')
 config        = config.merge(loaded_config)
-
-unicorn_options = {}
-unicorn_options[:listeners] = ["0.0.0.0:#{config[:port]}"]
 
 app=Proc.new { |env|
   current_time=Time.now
@@ -54,4 +51,4 @@ app=Proc.new { |env|
   end
 }
 
-Unicorn::HttpServer.new(app, unicorn_options).start.join
+run app

@@ -7,8 +7,8 @@ Type=simple
 User=galera-clustercheck
 Group=galera-clustercheck
 WorkingDirectory=/var/lib/galera-clustercheck/
-#EnvironmentFile=/etc/galera-clustercheck/galera-clustercheck.conf
-ExecStart=/usr/sbin/galera-clustercheck.rb $GALERA_CLUSTERCHECK_OPTIONS
+# options could be provided by sysconfig file e.g.
+ExecStart=/usr/bin/rackup $GALERA_CLUSTERCHECK_OPTIONS /usr/share/galera-clustercheck/config.ru
 Restart=on-failure
 
 [Install]
