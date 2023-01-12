@@ -21,7 +21,7 @@ loaded_config = YAML.load_file('/etc/galera-clustercheck/config.yml')
 config        = config.merge(loaded_config)
 
 unicorn_options = {}
-unicorn_options[:listeners] = ["0.0.0.0:#{config[:port]}"]
+unicorn_options[:listeners] = ["[::]:#{config[:port]}"]
 
 app=Proc.new { |env|
   current_time=Time.now
