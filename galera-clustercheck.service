@@ -1,6 +1,7 @@
 [Unit]
 Description=Galera Clustercheck
 After=mysql.target network.target
+BindsTo=mariadb.service
 
 [Service]
 Type=simple
