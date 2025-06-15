@@ -48,7 +48,6 @@ app=Proc.new { |env|
     end
   rescue Exception => ex
     ['500', {'Content-Type' => 'text/plain'}, ["woopsie daisy\n"]]
-    p ex 
   ensure
     client.close if client
   end
